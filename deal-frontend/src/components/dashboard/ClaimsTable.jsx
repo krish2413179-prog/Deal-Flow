@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { FileText } from 'lucide-react';
 import EmailModal from './EmailModal';
 
 const ClaimsTable = ({ claims, loading }) => {
@@ -200,7 +199,7 @@ const ClaimsTable = ({ claims, loading }) => {
                       className="text-blue-600 hover:text-blue-800 flex items-center space-x-1"
                       title="View email details"
                     >
-                      <FileText size={16} />
+                      <span>📄</span>
                       <span>View</span>
                     </button>
                   </td>

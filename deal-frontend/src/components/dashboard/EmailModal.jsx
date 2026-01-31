@@ -1,5 +1,4 @@
 import React from 'react';
-import { X } from 'lucide-react';
 
 const EmailModal = ({ claim, onClose }) => {
   if (!claim) return null;
@@ -33,9 +32,9 @@ const EmailModal = ({ claim, onClose }) => {
           <h2 className="text-xl font-semibold text-gray-900">Claim Details</h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="text-gray-400 hover:text-gray-600 transition-colors text-2xl"
           >
-            <X size={24} />
+            ✕
           </button>
         </div>
 
