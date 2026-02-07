@@ -57,7 +57,7 @@ useGSAP(() => {
 }, [isAnimating])
 
 const model = useGLTF("/models/dog.drc.glb")
-const[normalMap,sampleMatCap]=(useTexture(["/models/dog_normals.jpg","/matcaps/image.png"]))
+const[normalMap,sampleMatCap]=(useTexture(["/models/dog_normals.jpg","/matcaps/image1.png"]))
 .map(texture=>{
   texture.flipY =false
  texture.colorSpace = THREE.SRGBColorSpace
