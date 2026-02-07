@@ -171,11 +171,25 @@ export default function BusinessDash() {
   }
 
   const fetchClaims = async () => {
+    if (!currentWallet) {
+      setClaims([])
+      setIsLoading(false)
+      return
+    }
+    
     try {
       setIsLoading(true)
       
-      if (!currentWallet) {
-        // No wallet connected, show all claims
+      // First get the company for this wallet
+      const { data: companyData, error: companyError } = await supabase
+        .from('companies')
+        .select('company_wallet')
+        .eq('company_wallet', currentWallet.toLowerCase())
+        .single()
+
+      if (companyError || !companyData) {
+        console.log('No company found for wallet, showing all claims')
+        // If no company registered, show all claims
         const { data, error } = await supabase
           .from('claims')
           .select('*')
@@ -184,18 +198,14 @@ export default function BusinessDash() {
         if (error) throw error
         setClaims(data || [])
       } else {
-        // Filter claims by company_wallet
+        // Show claims for this company's wallet
         const { data, error } = await supabase
           .from('claims')
           .select('*')
-          .ilike('company_wallet', currentWallet)
+          .ilike('customer_wallet', `${currentWallet}%`)
           .order('created_at', { ascending: false })
 
         if (error) throw error
-        
-        console.log('Connected wallet:', currentWallet)
-        console.log('Filtered claims:', data)
-        
         setClaims(data || [])
       }
     } catch (error) {
