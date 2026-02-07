@@ -34,9 +34,9 @@ const Fairy = ({ shouldFlyAway = false }) => {
     if (fairyRef.current) {
       const tl = gsap.timeline(); 
      
-      // Fly in from bottom-left with a graceful curve
+     
       tl.fromTo(fairyRef.current.position, 
-        { x: -30, y: -30, z: -10 }, 
+        { x: -10, y: -30, z: -10 }, 
         { 
           x: 0,           
           y: -8,          
@@ -44,7 +44,7 @@ const Fairy = ({ shouldFlyAway = false }) => {
           duration: 3,    
           ease: "power2.out" 
         })
-        // Add a gentle floating animation
+        
         .to(fairyRef.current.position, {
           y: -7.5,
           duration: 1.5,
@@ -53,7 +53,7 @@ const Fairy = ({ shouldFlyAway = false }) => {
           yoyo: true
         })
         
-      // Add rotation animation for more life
+      
       gsap.to(fairyRef.current.rotation, {
         y: Math.PI / 6 + 0.1,
         duration: 2,
@@ -64,7 +64,7 @@ const Fairy = ({ shouldFlyAway = false }) => {
     }
   }, [])
 
-  // Fly away animation when button is clicked
+  
   useEffect(() => {
     if (shouldFlyAway && fairyRef.current) {
       gsap.killTweensOf(fairyRef.current.position)
@@ -72,7 +72,7 @@ const Fairy = ({ shouldFlyAway = false }) => {
       
       const tl = gsap.timeline()
       
-      // Fly upward and fade away
+     
       tl.to(fairyRef.current.position, {
         y: 30,
         z: 5,

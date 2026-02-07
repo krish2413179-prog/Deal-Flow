@@ -10,9 +10,6 @@ import { useGSAP } from '@gsap/react'
 
 import { useRef } from 'react'
 
-
-
-
 const Dog
  = ({isAnimating}) => {
 
@@ -61,8 +58,6 @@ const[normalMap,sampleMatCap]=(useTexture(["/models/dog_normals.jpg","/matcaps/i
 .map(texture=>{
   texture.flipY =false
  texture.colorSpace = THREE.SRGBColorSpace
- 
- 
   return texture
 })
 
@@ -98,10 +93,7 @@ const eyeMaterial = new THREE.MeshMatcapMaterial({
  })
 
 model.scene.traverse((child) => {
-    if (child.isMesh) {
-       
-        
-
+    if (child.isMesh) { 
         
         if (child.name.includes("Reye") || child.name.includes("Leye")) {
              child.material = eyeMaterial;

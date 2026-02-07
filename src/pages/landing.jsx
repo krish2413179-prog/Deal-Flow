@@ -14,7 +14,7 @@ const Landing = ({onConnect}) => {
     const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if wallet was previously connected
+    
     const savedAddress = localStorage.getItem('walletAddress');
     if (savedAddress) {
       setWalletAddress(savedAddress);
@@ -31,7 +31,7 @@ const Landing = ({onConnect}) => {
       setWalletAddress(result.address);
       localStorage.setItem('walletAddress', result.address);
       
-      // Trigger animation only after successful connection
+    
       setStartAnimation(true);
       
       if(onConnect) onConnect();
@@ -39,7 +39,7 @@ const Landing = ({onConnect}) => {
       setTimeout(() => {
         setIsLoading(false); 
         navigate('/dashboard');
-      }, 1500);
+      }, 3500);
     } else {
       setIsLoading(false);
       setError(result.error);
