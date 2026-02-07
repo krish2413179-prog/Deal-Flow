@@ -43,19 +43,33 @@ export function ConsumerDash() {
     try {
       console.log('Searching for wallet:', walletAddress)
       
-      // Search in both customer_wallet and customer fields
-      const { data, error } = await supabase
+      // First try exact match on customer_wallet
+      let { data, error } = await supabase
         .from('claims')
         .select('*')
-        .or(`customer_wallet.ilike.${walletAddress}%,customer.ilike.%${walletAddress}%`)
+        .ilike('customer_wallet', `${walletAddress}%`)
         .order('created_at', { ascending: false })
         .limit(1)
+
+      // If no results, try searching in customer field
+      if ((!data || data.length === 0) && !error) {
+        const result = await supabase
+          .from('claims')
+          .select('*')
+          .ilike('customer', `%${walletAddress}%`)
+          .order('created_at', { ascending: false })
+          .limit(1)
+        
+        data = result.data
+        error = result.error
+      }
 
       console.log('Search result:', data, 'Error:', error)
 
       if (error) {
         console.error('Search error:', error)
-        throw error
+        setError('Error searching for claims')
+        return
       }
       
       if (data && data.length > 0) {

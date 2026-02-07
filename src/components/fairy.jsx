@@ -1,11 +1,11 @@
 import React, { useRef, useEffect } from 'react'
 import * as THREE from "three"
 import { useThree } from '@react-three/fiber'
-import { useGLTF, useTexture, useAnimations, Environment } from '@react-three/drei' 
+import { useGLTF, useAnimations, Environment } from '@react-three/drei' 
 import { gsap } from 'gsap'
 import { useGSAP } from '@gsap/react'
 
-const Fairy = () => {
+const Fairy = ({ shouldFlyAway = false }) => {
 
   const model = useGLTF("/models/fairy.glb")
   const fairyRef = useRef() 
@@ -14,7 +14,6 @@ const Fairy = () => {
 
   
   useEffect(() => {
-   
     const idleAction = actions["10616_XiaoQiao_Show4 (merge)|Idleshow|Base Layer"]; 
     
     if (idleAction) {
@@ -30,23 +29,64 @@ const Fairy = () => {
   })
 
 
+  // Initial entrance animation
   useGSAP(() => {
     if (fairyRef.current) {
       const tl = gsap.timeline(); 
      
-
-     
-      tl.fromTo(fairyRef.current.position, { x: -30, y: -0 }, 
+      // Fly in from bottom-left with a graceful curve
+      tl.fromTo(fairyRef.current.position, 
+        { x: -30, y: -30, z: -10 }, 
         { 
           x: 0,           
           y: -8,          
-          duration: 4,    
+          z: -10,
+          duration: 3,    
           ease: "power2.out" 
         })
-
-    
+        // Add a gentle floating animation
+        .to(fairyRef.current.position, {
+          y: -7.5,
+          duration: 1.5,
+          ease: "sine.inOut",
+          repeat: -1,
+          yoyo: true
+        })
+        
+      // Add rotation animation for more life
+      gsap.to(fairyRef.current.rotation, {
+        y: Math.PI / 6 + 0.1,
+        duration: 2,
+        ease: "sine.inOut",
+        repeat: -1,
+        yoyo: true
+      })
     }
-  }, [actions])
+  }, [])
+
+  // Fly away animation when button is clicked
+  useEffect(() => {
+    if (shouldFlyAway && fairyRef.current) {
+      gsap.killTweensOf(fairyRef.current.position)
+      gsap.killTweensOf(fairyRef.current.rotation)
+      
+      const tl = gsap.timeline()
+      
+      // Fly upward and fade away
+      tl.to(fairyRef.current.position, {
+        y: 30,
+        z: 5,
+        duration: 2.5,
+        ease: "power2.in"
+      })
+      .to(fairyRef.current.rotation, {
+        y: Math.PI * 2,
+        duration: 2.5,
+        ease: "power1.inOut"
+      }, 0)
+    }
+  }, [shouldFlyAway])
+
   return (
     <>
       <primitive 
