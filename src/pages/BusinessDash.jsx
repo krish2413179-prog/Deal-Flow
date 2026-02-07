@@ -171,16 +171,43 @@ export default function BusinessDash() {
   }
 
   const fetchClaims = async () => {
+    if (!currentWallet) {
+      setClaims([])
+      setIsLoading(false)
+      return
+    }
+    
     try {
       setIsLoading(true)
-      const { data, error } = await supabase
-        .from('claims')
-        .select('*')
-        .order('created_at', { ascending: false })
-
-      if (error) throw error
       
-      setClaims(data || [])
+      // First get the company for this wallet
+      const { data: companyData, error: companyError } = await supabase
+        .from('companies')
+        .select('company_wallet')
+        .eq('company_wallet', currentWallet.toLowerCase())
+        .single()
+
+      if (companyError || !companyData) {
+        console.log('No company found for wallet, showing all claims')
+        // If no company registered, show all claims
+        const { data, error } = await supabase
+          .from('claims')
+          .select('*')
+          .order('created_at', { ascending: false })
+
+        if (error) throw error
+        setClaims(data || [])
+      } else {
+        // Show claims for this company's wallet
+        const { data, error } = await supabase
+          .from('claims')
+          .select('*')
+          .ilike('customer_wallet', `${currentWallet}%`)
+          .order('created_at', { ascending: false })
+
+        if (error) throw error
+        setClaims(data || [])
+      }
     } catch (error) {
       console.error('Error fetching claims:', error)
       setClaims([])
@@ -395,11 +422,11 @@ export default function BusinessDash() {
         </div>
 
         <br />
-        <Tabs defaultValue="claims">
+        <Tabs defaultValue="company">
           <TabsList className="backdrop-blur-xl bg-white/10 dark:bg-black/10 border border-white/20 p-1 rounded-2xl mb-6">
+            <TabsTrigger value="company" className="data-[state=active]:bg-white/30 data-[state=active]:text-white text-white/70 rounded-xl">Company Registration</TabsTrigger>
             <TabsTrigger value="claims" className="data-[state=active]:bg-white/30 data-[state=active]:text-white text-white/70 rounded-xl">Claims</TabsTrigger>
             <TabsTrigger value="funds" className="data-[state=active]:bg-white/30 data-[state=active]:text-white text-white/70 rounded-xl">Fund Management</TabsTrigger>
-            <TabsTrigger value="company" className="data-[state=active]:bg-white/30 data-[state=active]:text-white text-white/70 rounded-xl">Company Registration</TabsTrigger>
             <TabsTrigger value="analytics" className="data-[state=active]:bg-white/30 data-[state=active]:text-white text-white/70 rounded-xl">Analytics</TabsTrigger>
           </TabsList>
 

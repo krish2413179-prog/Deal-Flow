@@ -17,7 +17,7 @@ const Dashboard = () => {
         </Canvas>
 
         
-       <div className='flex absolute top-0 left-0 h-screen min-w-1/2  p-6 text-white  justify-center items-center  '>
+       <div  className='flex absolute top-0 left-0 h-screen min-w-1/2  p-6 text-white  justify-center items-center  '>
        <CardImage ></CardImage>
        </div>
        <div className=' flex absolute top-0 right-0 h-screen min-w-1/2 z-20 p-6 text-white  justify-center items-center '>

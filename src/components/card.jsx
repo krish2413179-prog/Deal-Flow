@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge"
+import React, { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { useNavigate } from "react-router-dom"
 import {
@@ -11,9 +12,14 @@ import {
 } from "@/components/ui/card"
 
 export function CardImage() {
+  const [shouldFlyAway, setShouldFlyAway] = useState(false)
     const navigate = useNavigate();
     const handleClick=()=>{
-        navigate("/businessdash")
+      setShouldFlyAway(true)
+        setTimeout(() => {
+      navigate("/businessdash")
+    }, 1000)
+      
     }
   return (
     <Card className="relative mx-auto w-full max-w-sm pt-0">

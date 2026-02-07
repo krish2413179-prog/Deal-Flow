@@ -29,7 +29,7 @@ const Fairy = ({ shouldFlyAway = false }) => {
   })
 
 
-  // Initial entrance animation
+  
   useGSAP(() => {
     if (fairyRef.current) {
       const tl = gsap.timeline(); 
