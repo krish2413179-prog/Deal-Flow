@@ -19,7 +19,7 @@ export function CardImage() {
     <Card className="relative mx-auto w-full max-w-sm pt-0">
       <div className="absolute inset-0  aspect-video  " />
       <img
-        src="src/assets/right.jpeg"
+        src="/assets/right.jpeg"
         alt="Event cover"
         className="relative z-0 aspect-video w-full object-cover rounded-t-lg"
       />
