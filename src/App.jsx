@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import Dog from './components/dog'
+
 import { Canvas } from '@react-three/fiber'
 import './App.css'
 import Landing from './pages/landing'
