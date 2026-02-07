@@ -38,46 +38,55 @@ export function ConsumerDash() {
   const handleSearch = async () => {
     setIsSearching(true)
     setError(null)
+    setSearchResult(null)
+    
     try {
+      console.log('Searching for wallet:', walletAddress)
+      
+      // Search in both customer_wallet and customer fields
       const { data, error } = await supabase
         .from('claims')
         .select('*')
-        .eq('customer_wallet', walletAddress.toLowerCase())
+        .or(`customer_wallet.ilike.${walletAddress}%,customer.ilike.%${walletAddress}%`)
         .order('created_at', { ascending: false })
         .limit(1)
-        .single()
 
-      if (error) throw error
+      console.log('Search result:', data, 'Error:', error)
+
+      if (error) {
+        console.error('Search error:', error)
+        throw error
+      }
       
-      if (data) {
+      if (data && data.length > 0) {
+        const claim = data[0]
+        
         // Fetch timeline for this claim
         const { data: timeline, error: timelineError } = await supabase
           .from('claim_timeline')
           .select('*')
-          .eq('claim_id', data.id)
+          .eq('claim_id', claim.id)
           .order('date', { ascending: true })
 
-        if (!timelineError && timeline) {
-          data.timeline = timeline
+        if (!timelineError && timeline && timeline.length > 0) {
+          claim.timeline = timeline
         } else {
           // Create default timeline based on status
-          data.timeline = [
-            { status: "Submitted", date: data.created_at, completed: true },
-            { status: "AI Verification", date: data.created_at, completed: data.status !== 'pending' },
-            { status: data.status === 'approved' ? 'Approved' : data.status === 'rejected' ? 'Rejected' : 'Processing', date: data.updated_at, completed: data.status !== 'pending' },
-            { status: "Payment Sent", date: data.processed_date, completed: data.status === 'approved' && data.tx_hash },
+          claim.timeline = [
+            { status: "Submitted", date: claim.created_at, completed: true },
+            { status: "AI Verification", date: claim.created_at, completed: claim.status.toLowerCase() !== 'pending' },
+            { status: claim.status.toLowerCase() === 'approved' ? 'Approved' : claim.status.toLowerCase() === 'rejected' ? 'Rejected' : 'Processing', date: claim.updated_at, completed: claim.status.toLowerCase() !== 'pending' },
+            { status: "Payment Sent", date: claim.processed_date, completed: claim.status.toLowerCase() === 'approved' && claim.tx_hash },
           ]
         }
         
-        setSearchResult(data)
+        setSearchResult(claim)
       } else {
         setError('No claim found for this wallet address')
-        setSearchResult(null)
       }
     } catch (error) {
       console.error('Error searching claim:', error)
       setError('No claim found for this wallet address')
-      setSearchResult(null)
     } finally {
       setIsSearching(false)
     }
