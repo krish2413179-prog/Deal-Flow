@@ -75,7 +75,7 @@ Traditional insurance is plagued by slow, manual claim verification and opaque r
 
 1.  Clone the repo
     ```sh
-    git clone [https://github.com/your_username/dealFlow.git](https://github.com/krish2413179-prog/dealFlow.git)
+    git clone [https://github.com/krish2413179-prog/dealFlow.git](https://github.com/krish2413179-prog/dealFlow.git)
     ```
 2.  Install NPM packages
     ```sh
