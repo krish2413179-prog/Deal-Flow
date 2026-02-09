@@ -8,6 +8,10 @@
 
 <br />
 
+## DEPLOYED LINK
+
+https://deal-flows.netlify.app/
+
 ## 💡 Inspiration
 Traditional insurance is plagued by slow, manual claim verification and opaque rejection reasons. **dealFlow** solves this by acting as an **AI Forensic Auditor**. It connects a user's real-world evidence (photos of bills/receipts) with a company's on-chain liquidity and policy rules, creating a system where valid claims are paid out instantly, and invalid ones are rejected with clear, transparent reasons.
 
